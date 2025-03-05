@@ -1,0 +1,2 @@
+模型代码的入口是main.py，训练部分是train.py，预测部分是infer.py，预训练BERT编码部分是Encoder部分，需要在根目录同级目录下放上huggingface下载的BERT预训练参数才能运行，由于参数过大，没有放在项目文件里。
+部署部分是运行app.py，就可以复制终端的网址打开网页。
