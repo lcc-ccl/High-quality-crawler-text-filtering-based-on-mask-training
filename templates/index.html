@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Starry Night AI System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            overflow: hidden;
+            background: #0c1445;
+        }
+
+        .starry-night {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1a2c5b 0%, #0c1445 100%);
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(1px 1px at 10% 10%, #fff 100%, transparent),
+                radial-gradient(1px 1px at 20% 20%, #fff 100%, transparent),
+                radial-gradient(2px 2px at 30% 30%, #fff 100%, transparent),
+                radial-gradient(2px 2px at 40% 40%, #fff 100%, transparent),
+                radial-gradient(2px 2px at 50% 50%, #fff 100%, transparent);
+            background-size: 550px 550px;
+            animation: stars 100s linear infinite;
+        }
+
+        .swirl {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 50% 50%, #f2d750 0%, transparent 20%),
+                radial-gradient(circle at 30% 30%, #586ba4 0%, transparent 40%);
+            filter: blur(5px);
+            opacity: 0.7;
+            animation: swirl 30s linear infinite;
+        }
+
+        @keyframes stars {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes swirl {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .main-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        #container {
+            background: rgba(26, 44, 91, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 15px rgba(242, 215, 80, 0.3);
+            border-color: rgba(242, 215, 80, 0.5);
+        }
+
+        button {
+            background: linear-gradient(45deg, #f2d750, #586ba4);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(242, 215, 80, 0.4);
+            background: linear-gradient(45deg, #f2d750, #324376);
+        }
+
+        #result {
+            margin-top: 30px;
+            font-size: 18px;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(88, 107, 164, 0.2);
+            min-height: 60px;
+        }
+
+        @media (max-width: 600px) {
+            #container {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="starry-night">
+        <div class="stars"></div>
+        <div class="swirl"></div>
+    </div>
+
+    <div class="main-container">
+        <div id="container">
+            <input type="text" id="word" placeholder="Enter word">
+            <input type="text" id="sentence" placeholder="Enter sentence">
+            <button id="submit">Submit</button>
+            <div id="result"></div>
+        </div>
+    </div>
+
+<script>
+    document.getElementById('submit').addEventListener('click', function() {
+        const word = document.getElementById('word').value;
+        const sentence = document.getElementById('sentence').value;
+
+        fetch('/process-input', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ word, sentence })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('result').innerText = data.result;
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+</body>
+</html>
+
